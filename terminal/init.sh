@@ -6,3 +6,6 @@ alias sudo='sudo '
 
 # Register all aliases
 for aliasToSource in "$DOTFILES_PATH/terminal/_aliases/"*; do source "$aliasToSource"; done
+
+# Register all functions
+for funcToSource in "$DOTFILES_PATH/terminal/_functions/"*; do source "$funcToSource"; done
