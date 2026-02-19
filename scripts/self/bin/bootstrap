@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/core/_main.sh"
+source "$DOTFILES_PATH/scripts/self/git.sh"
+source "$DOTFILES_PATH/scripts/self/symlinks.sh"
+source "$DOTFILES_PATH/scripts/self/shell.sh"
+
+##? Bootstrap the dotfiles on a fresh system
+#?? 1.0.0
+##?
+##? Usage:
+##?    bootstrap
+
+docs::eval_help "$@"
+
+log::header "Bootstrapping dotfiles"
+
+sudo -v
+
+log::note "Installing system packages"
+"$DOTFILES_PATH/bin/dot" packages install
+
+log::note "Setting up Oh My Zsh"
+install_oh_my_zsh
+
+if has_submodules; then
+  log::note "Updating submodules"
+  update_submodules
+fi
+
+log::note "Applying symlinks"
+apply_common_symlinks
+
+if [[ -z "$(git config --global user.email)" ]]; then
+  log::note "Setting up git config"
+  read -rp "What is your email? " git_email
+  read -rp "And your name? " git_name
+  git config --global user.email "$git_email"
+  git config --global user.name "$git_name"
+
+  read -rp "Set up GPG signing? (y/N) " setup_gpg
+  if [[ "$setup_gpg" =~ ^[Yy]$ ]]; then
+    read -rp "GPG signing key ID: " git_key_id
+    git config --global user.signingkey "$git_key_id"
+    git config --global commit.gpgsign true
+    git config --global tag.gpgsign true
+    log::success "GPG signing configured"
+  fi
+else
+  log::success "Git config already set, skipping"
+fi
+
+log::note "Setting zsh as default shell"
+set_default_shell
+
+log::success "Bootstrap complete! Run 'exec zsh' to start your new shell."
