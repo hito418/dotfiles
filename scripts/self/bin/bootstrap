@@ -33,19 +33,7 @@ chmod 700 ~/.ssh/sockets
 
 if [[ -z "$(git config --global user.email)" ]]; then
   log::note "Setting up git config"
-  read -rp "What is your email? " git_email
-  read -rp "And your name? " git_name
-  git config --global user.email "$git_email"
-  git config --global user.name "$git_name"
-
-  read -rp "Set up GPG signing? (y/N) " setup_gpg
-  if [[ "$setup_gpg" =~ ^[Yy]$ ]]; then
-    read -rp "GPG signing key ID: " git_key_id
-    git config --global user.signingkey "$git_key_id"
-    git config --global commit.gpgsign true
-    git config --global tag.gpgsign true
-    log::success "GPG signing configured"
-  fi
+  "$DOTFILES_PATH/bin/dot" git setup
 else
   log::success "Git config already set, skipping"
 fi

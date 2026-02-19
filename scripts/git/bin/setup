@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/core/_main.sh"
+
+##? Configure git identity and GPG signing in .gitconfig.local
+
+readonly GIT_LOCAL="$DOTFILES_PATH/git/.gitconfig.local"
+
+read -rp "What is your email? " git_email
+read -rp "And your name? " git_name
+
+[[ -n "$git_email" ]] && git config --file "$GIT_LOCAL" user.email "$git_email"
+[[ -n "$git_name" ]] && git config --file "$GIT_LOCAL" user.name "$git_name"
+log::success "Git identity configured"
+
+read -rp "Set up GPG signing? (y/N) " setup_gpg
+if [[ "$setup_gpg" =~ ^[Yy]$ ]]; then
+  read -rp "GPG signing key ID: " git_key_id
+  git config --file "$GIT_LOCAL" user.signingkey "$git_key_id"
+  git config --file "$GIT_LOCAL" commit.gpgsign true
+  git config --file "$GIT_LOCAL" tag.gpgsign true
+  log::success "GPG signing configured"
+fi
