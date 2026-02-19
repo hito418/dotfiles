@@ -13,6 +13,7 @@ set -euo pipefail
 ##? Namespaces:
 ##?    self             Dotfiles lifecycle (bootstrap, update)
 ##?    packages         System package management
+##?    git              Git configuration
 
 export DOTFILES_PATH
 DOTFILES_PATH="$(cd "$(dirname "$0")/.." && pwd)"
