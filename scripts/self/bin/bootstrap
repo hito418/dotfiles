@@ -33,6 +33,10 @@ fi
 log::note "Applying symlinks"
 apply_common_symlinks
 
+log::note "Setting up SSH sockets directory"
+mkdir -p ~/.ssh/sockets
+chmod 700 ~/.ssh/sockets
+
 if [[ -z "$(git config --global user.email)" ]]; then
   log::note "Setting up git config"
   read -rp "What is your email? " git_email
