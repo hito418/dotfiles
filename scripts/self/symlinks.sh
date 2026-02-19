@@ -17,7 +17,10 @@ apply_symlinks() {
     source="$DOTFILES_PATH/$source"
 
     mkdir -p "$(dirname "$target")"
-    ln -sf "$source" "$target"
+    if [[ -d "$target" && ! -L "$target" ]]; then
+      rm -rf "$target"
+    fi
+    ln -sfn "$source" "$target"
     log::success "Linked $target → $source"
   done < "$config"
 }
