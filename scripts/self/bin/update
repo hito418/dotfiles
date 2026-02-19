@@ -26,6 +26,9 @@ if has_submodules; then
   update_submodules
 fi
 
+log::note "Updating Oh My Zsh"
+update_oh_my_zsh
+
 log::note "Applying symlinks"
 apply_common_symlinks
 
