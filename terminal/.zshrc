@@ -32,5 +32,10 @@ if command -v direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
 fi
 
+# zoxide
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
 # Dotfiles terminal init (aliases, ulimits, etc.)
 source "$DOTFILES_PATH/terminal/init.sh"
