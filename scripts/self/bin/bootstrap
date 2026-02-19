@@ -8,12 +8,6 @@ source "$DOTFILES_PATH/scripts/self/symlinks.sh"
 source "$DOTFILES_PATH/scripts/self/shell.sh"
 
 ##? Bootstrap the dotfiles on a fresh system
-#?? 1.0.0
-##?
-##? Usage:
-##?    bootstrap
-
-docs::eval_help "$@"
 
 log::header "Bootstrapping dotfiles"
 
