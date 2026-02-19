@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+##? The dotfiles CLI
+#?? 1.0.0
+##?
+##? Usage:
+##?    dot [<namespace>] <command> [<args>...]
+##?    dot -h | --help
+##?    dot --version
+##?
+##? Commands:
+##?    bootstrap        Bootstrap a fresh system (self)
+##?    update           Update dotfiles and symlinks (self)
+##?    packages install Install system packages
+
+export DOTFILES_PATH
+DOTFILES_PATH="$(cd "$(dirname "$0")/.." && pwd)"
+
+source "$DOTFILES_PATH/scripts/core/_main.sh"
+
+docs::eval_help_first_arg "${1:-}"
+
+namespace="${1:-}"
+command="${2:-}"
+
+# Default to "self" namespace when only a command is given
+if [[ -n "$namespace" && -z "$command" && -f "$DOTFILES_PATH/scripts/self/bin/$namespace" ]]; then
+  command="$namespace"
+  namespace="self"
+  shift 1 2>/dev/null || true
+elif [[ -n "$namespace" && -n "$command" ]]; then
+  shift 2 2>/dev/null || true
+else
+  extract_help "$0"
+  exit 1
+fi
+
+script="$DOTFILES_PATH/scripts/$namespace/bin/$command"
+
+if [[ ! -f "$script" ]]; then
+  log::error "Unknown command: dot $namespace $command"
+  exit 1
+fi
+
+exec "$script" "$@"

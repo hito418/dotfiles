@@ -1,0 +1,44 @@
+[include]
+    path = ~/.gitconfig.local
+
+[fetch]
+	prune = true
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = true
+
+[apply]
+	# Detect whitespace errors when applying a patch
+	whitespace = fix
+
+[pull]
+	rebase = true
+
+[core]
+    editor = vim
+#    excludesfile = ~/.gitignore_global
+	attributesfile = ~/.gitattributes
+	autocrlf = input
+	trustctime = false
+	precomposeunicode = false
+	pager = delta --dark
+	ignorecase = false
+
+[help]
+	autocorrect = 1
+
+[alias]
+    st = status
+    co = checkout
+    sw = switch
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = log --graph --oneline --all
+
+[init]
+    defaultBranch = main

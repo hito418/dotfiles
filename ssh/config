@@ -1,0 +1,17 @@
+# Include machine-specific overrides
+Include config.local
+
+Host *
+    # Keep connections alive
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+    # Connection multiplexing
+    ControlMaster auto
+    ControlPath ~/.ssh/sockets/%r@%h-%p
+    ControlPersist 600
+
+    # Security
+    AddKeysToAgent yes
+    HashKnownHosts yes
+    IdentitiesOnly yes

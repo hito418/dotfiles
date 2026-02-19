@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DOTFILES_REPO="https://github.com/hito418/dotfiles.git"
+DOTFILES_PATH="$HOME/.dotfiles"
+
+info()  { printf '\033[34m[*]\033[0m %s\n' "$1"; }
+ok()    { printf '\033[32m[+]\033[0m %s\n' "$1"; }
+fail()  { printf '\033[31m[-]\033[0m %s\n' "$1"; exit 1; }
+
+info "hito418/dotfiles installer"
+
+# 1. Ensure git is available
+command -v git &>/dev/null || fail "git is not installed"
+
+# 2. Clone or update
+if [[ -d "$DOTFILES_PATH" ]]; then
+  info "Dotfiles already present at $DOTFILES_PATH, pulling latest"
+  git -C "$DOTFILES_PATH" pull --ff-only
+else
+  info "Cloning into $DOTFILES_PATH"
+  git clone "$DOTFILES_REPO" "$DOTFILES_PATH"
+fi
+
+# 3. Bootstrap
+export DOTFILES_PATH
+"$DOTFILES_PATH/bin/dot" self bootstrap
+
+ok "Done!"

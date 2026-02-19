@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/core/_main.sh"
+source "$DOTFILES_PATH/scripts/packages/apt.sh"
+
+##? Install system packages
+#?? 1.0.0
+##?
+##? Usage:
+##?    install
+
+docs::eval_help "$@"
+
+log::header "Installing packages"
+
+log::note "Adding external repositories"
+apt::add_github_cli_repo
+
+log::note "Updating apt package index"
+sudo apt update -y
+
+apt::install_from_conf "apt.conf"
+apt::install_packages gh
+
+# Debian names the bat binary "batcat"
+if platform::command_exists batcat && ! platform::command_exists bat; then
+  mkdir -p "$HOME/.local/bin"
+  ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
+  log::success "Linked batcat → bat"
+fi
