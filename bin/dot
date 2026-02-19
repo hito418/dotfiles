@@ -13,6 +13,7 @@ set -euo pipefail
 ##? Namespaces:
 ##?    self             Dotfiles lifecycle (bootstrap, update)
 ##?    packages         System package management
+##?    git              Git configuration
 ##?    doc              Reference guides
 
 export DOTFILES_PATH
