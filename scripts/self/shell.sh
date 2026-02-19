@@ -11,17 +11,6 @@ install_oh_my_zsh() {
   log::success "Oh My Zsh installed"
 }
 
-update_oh_my_zsh() {
-  if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-    log::error "Oh My Zsh is not installed"
-    return 1
-  fi
-
-  log::note "Updating Oh My Zsh"
-  omz update
-  log::success "Oh My Zsh updated"
-}
-
 set_default_shell() {
   local -r zsh_path="$(command -v zsh)"
 
