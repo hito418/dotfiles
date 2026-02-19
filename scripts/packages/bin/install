@@ -6,12 +6,6 @@ source "$DOTFILES_PATH/scripts/core/_main.sh"
 source "$DOTFILES_PATH/scripts/packages/apt.sh"
 
 ##? Install system packages
-#?? 1.0.0
-##?
-##? Usage:
-##?    install
-
-docs::eval_help "$@"
 
 log::header "Installing packages"
 

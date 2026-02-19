@@ -10,26 +10,53 @@ set -euo pipefail
 ##?    dot -h | --help
 ##?    dot --version
 ##?
-##? Commands:
-##?    bootstrap        Bootstrap a fresh system (self)
-##?    update           Update dotfiles and symlinks (self)
-##?    packages install Install system packages
+##? Namespaces:
+##?    self             Dotfiles lifecycle (bootstrap, update)
+##?    packages         System package management
 
 export DOTFILES_PATH
 DOTFILES_PATH="$(cd "$(dirname "$0")/.." && pwd)"
 
 source "$DOTFILES_PATH/scripts/core/_main.sh"
 
-docs::eval_help_first_arg "${1:-}"
+# Separate positional args from flags
+args=()
+show_help=false
+show_version=false
 
-namespace="${1:-}"
-command="${2:-}"
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help) show_help=true ;;
+    --version) show_version=true ;;
+    *) args+=("$arg") ;;
+  esac
+done
+
+namespace="${args[0]:-}"
+command="${args[1]:-}"
+
+# Resolve help/version target: command > namespace > dot
+if $show_help || $show_version; then
+  if [[ -n "$namespace" && -n "$command" && -f "$DOTFILES_PATH/scripts/$namespace/bin/$command" ]]; then
+    target="$DOTFILES_PATH/scripts/$namespace/bin/$command"
+  elif [[ -n "$namespace" && -f "$DOTFILES_PATH/scripts/$namespace/_namespace.sh" ]]; then
+    target="$DOTFILES_PATH/scripts/$namespace/_namespace.sh"
+  else
+    target="$0"
+  fi
+
+  if $show_help; then extract_help "$target"; fi
+  if $show_version; then _compose_version "$target"; fi
+  exit 0
+fi
 
 # Default to "self" namespace when only a command is given
 if [[ -n "$namespace" && -z "$command" && -f "$DOTFILES_PATH/scripts/self/bin/$namespace" ]]; then
   command="$namespace"
   namespace="self"
-  shift 1 2>/dev/null || true
+elif [[ -n "$namespace" && -z "$command" && -f "$DOTFILES_PATH/scripts/$namespace/_namespace.sh" ]]; then
+  extract_help "$DOTFILES_PATH/scripts/$namespace/_namespace.sh"
+  exit 0
 elif [[ -n "$namespace" && -n "$command" ]]; then
   shift 2 2>/dev/null || true
 else

@@ -7,13 +7,7 @@ source "$DOTFILES_PATH/scripts/self/git.sh"
 source "$DOTFILES_PATH/scripts/self/symlinks.sh"
 source "$DOTFILES_PATH/scripts/self/shell.sh"
 
-##? Updates submodules, dotfiles and attempts to do some setup
-#?? 1.0.0
-##?
-##? Usage:
-##?    update
-
-docs::eval_help "$@"
+##? Update dotfiles, packages, and symlinks
 
 log::note "Updating dotfiles"
 self_update
