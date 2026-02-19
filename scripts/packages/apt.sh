@@ -27,6 +27,21 @@ apt::install_from_conf() {
   apt::install_packages "${packages[@]}"
 }
 
+apt::add_github_cli_repo() {
+  local -r keyring="/usr/share/keyrings/githubcli-archive-keyring.gpg"
+
+  if [[ -f "$keyring" ]]; then
+    log::success "GitHub CLI repo already configured"
+    return 0
+  fi
+
+  log::note "Adding GitHub CLI apt repository"
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee "$keyring" >/dev/null
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=$keyring] https://cli.github.com/packages stable main" \
+    | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+  log::success "GitHub CLI repo added"
+}
+
 apt::install_packages() {
   local missing=()
 

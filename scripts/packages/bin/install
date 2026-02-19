@@ -15,10 +15,14 @@ docs::eval_help "$@"
 
 log::header "Installing packages"
 
+log::note "Adding external repositories"
+apt::add_github_cli_repo
+
 log::note "Updating apt package index"
 sudo apt update -y
 
 apt::install_from_conf "apt.conf"
+apt::install_packages gh
 
 # Debian names the bat binary "batcat"
 if platform::command_exists batcat && ! platform::command_exists bat; then
