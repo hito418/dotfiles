@@ -16,7 +16,6 @@ has_submodules() {
 
 update_submodules() {
   cd "$DOTFILES_PATH" || exit
-  git pull
   git submodule init
   git submodule update
   git submodule status

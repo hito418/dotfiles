@@ -6,6 +6,7 @@ source "$DOTFILES_PATH/scripts/core/_main.sh"
 source "$DOTFILES_PATH/scripts/self/git.sh"
 source "$DOTFILES_PATH/scripts/self/symlinks.sh"
 source "$DOTFILES_PATH/scripts/self/shell.sh"
+source "$DOTFILES_PATH/scripts/claude/packs.sh"
 
 ##? Bootstrap the dotfiles on a fresh system
 
@@ -26,6 +27,9 @@ fi
 
 log::note "Applying symlinks"
 apply_common_symlinks
+
+log::note "Installing core Claude agents"
+packs::install "$HOME/.claude/agents" "$(packs::resolve core)"
 
 log::note "Setting up SSH sockets directory"
 mkdir -p ~/.ssh/sockets

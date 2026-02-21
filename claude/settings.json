@@ -24,6 +24,5 @@
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
-  "teammateMode": "tmux",
-
+  "teammateMode": "tmux"
 }
