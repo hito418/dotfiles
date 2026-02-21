@@ -37,6 +37,8 @@ if command -v zoxide &>/dev/null; then
   eval "$(zoxide init zsh)"
 fi
 
+export GPG_TTY=$(tty)
+
 # Dotfiles terminal init (aliases, ulimits, etc.)
 source "$DOTFILES_PATH/terminal/init.sh"
 
