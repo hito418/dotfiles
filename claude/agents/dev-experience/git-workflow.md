@@ -2,7 +2,7 @@
 name: git-workflow
 description: Git operations specialist for branching strategies, conventional commits, PR workflows, conflict resolution, and release tagging. Use PROACTIVELY for git workflow questions, branch management, and version control operations.
 tools: Read, Grep, Glob, Bash, LS, Task
-model: haiku
+model: sonnet
 ---
 
 # Git Workflow
