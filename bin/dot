@@ -15,6 +15,7 @@ set -euo pipefail
 ##?    packages         System package management
 ##?    git              Git configuration
 ##?    doc              Reference guides
+##?    claude           Claude Code agent pack management
 
 export DOTFILES_PATH
 DOTFILES_PATH="$(cd "$(dirname "$0")/.." && pwd)"

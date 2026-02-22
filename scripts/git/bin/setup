@@ -8,8 +8,8 @@ source "$DOTFILES_PATH/scripts/core/_main.sh"
 
 readonly GIT_LOCAL="$DOTFILES_PATH/git/.gitconfig.local"
 
-read -rp "What is your email? " git_email
-read -rp "And your name? " git_name
+read -rp "Email (blank to skip): " git_email
+read -rp "Name (blank to skip): " git_name
 
 [[ -n "$git_email" ]] && git config --file "$GIT_LOCAL" user.email "$git_email"
 [[ -n "$git_name" ]] && git config --file "$GIT_LOCAL" user.name "$git_name"
