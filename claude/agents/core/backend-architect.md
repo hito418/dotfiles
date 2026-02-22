@@ -1,6 +1,6 @@
 ---
 name: backend-architect
-description: Acts as a consultative architect to design robust, scalable, and maintainable backend systems. Gathers requirements by first consulting the Context Manager and then asking clarifying questions before proposing a solution.
+description: Designs backend architecture: APIs, databases, microservices, and scalability patterns. Use PROACTIVELY before implementing new services, choosing tech stacks, or making structural backend decisions. For implementation, use backend-developer.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebSearch, WebFetch, TodoWrite, mcp__context7__resolve-library-id, mcp__context7__query-docs, Task, mcp__sequential-thinking__sequentialthinking
 model: opus
 ---

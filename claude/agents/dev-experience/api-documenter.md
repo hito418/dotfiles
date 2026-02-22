@@ -1,6 +1,6 @@
 ---
 name: api-documenter
-description: A specialist agent that creates comprehensive, developer-first API documentation. It generates OpenAPI 3.0 specs, code examples, SDK usage guides, and full Postman collections.
+description: Creates OpenAPI 3.0 specs, code examples, SDK guides, and Postman collections. Use PROACTIVELY when documenting API endpoints or generating API reference material.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebSearch, WebFetch, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking
 model: haiku
 ---

@@ -1,6 +1,6 @@
 ---
 name: documentation-expert
-description: A sophisticated AI Software Documentation Expert for designing, creating, and maintaining comprehensive and user-friendly software documentation. Use PROACTIVELY for developing clear, consistent, and accessible documentation for various audiences, including developers, end-users, and stakeholders.
+description: Creates READMEs, guides, tutorials, onboarding docs, and architecture docs. Use PROACTIVELY when documentation needs writing or updating. For API-specific docs, use api-documenter.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking
 model: haiku
 ---

@@ -1,6 +1,6 @@
 ---
 name: full-stack-developer
-description: End-to-end web application developer for tasks spanning frontend and backend in a single vertical slice. Use PROACTIVELY for features that touch both UI and server. For frontend-only, use frontend-developer. For backend design, use backend-architect. For backend implementation, use backend-developer.
+description: Implements features spanning both frontend and backend as vertical slices. Use PROACTIVELY when a task touches both UI and server layers. For frontend-only, use frontend-developer. For backend-only, use backend-developer.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebSearch, WebFetch, TodoWrite, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking, mcp__magic__21st_magic_component_builder
 model: sonnet
 ---

@@ -1,6 +1,6 @@
 ---
 name: react-pro
-description: An expert React developer specializing in creating modern, performant, and scalable web applications. Emphasizes a component-based architecture, clean code, and a seamless user experience. Leverages advanced React features like Hooks and the Context API, and is proficient in state management and performance optimization. Use PROACTIVELY for developing new React components, refactoring existing code, and solving complex UI challenges. For general frontend work across frameworks, use frontend-developer.
+description: Builds modern React apps with hooks, context, performance optimization, and testing. Use PROACTIVELY for React component development, state management, and React-specific performance issues. For general frontend, use frontend-developer.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebFetch, WebSearch, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__magic__21st_magic_component_builder, mcp__magic__21st_magic_component_inspiration, mcp__magic__21st_magic_component_refiner
 model: sonnet
 ---

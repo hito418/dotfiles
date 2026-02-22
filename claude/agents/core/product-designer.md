@@ -1,6 +1,6 @@
 ---
 name: product-designer
-description: Comprehensive product designer covering visual UI design and UX research. Use PROACTIVELY for interface design, design systems, user flow analysis, usability evaluation, and prototyping across all platforms.
+description: Designs interfaces, user flows, design systems, and prototypes. Use PROACTIVELY when making UI/UX decisions, wireframing, or evaluating usability.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebSearch, WebFetch, TodoWrite, Task, mcp__magic__21st_magic_component_builder, mcp__magic__21st_magic_component_refiner, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot
 model: sonnet
 ---

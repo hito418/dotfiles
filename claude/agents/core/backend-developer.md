@@ -1,6 +1,6 @@
 ---
 name: backend-developer
-description: Implementation-focused backend developer that writes production code, tests, and migrations. Counterpart to backend-architect (who designs). Use PROACTIVELY for implementing API endpoints, database operations, background jobs, and server-side logic.
+description: Implements server-side code: API endpoints, database operations, migrations, and tests. Use PROACTIVELY when writing or modifying backend logic. For design decisions, use backend-architect.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebSearch, WebFetch, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking
 model: sonnet
 ---

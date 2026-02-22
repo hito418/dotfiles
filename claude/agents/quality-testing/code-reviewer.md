@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: An AI-powered senior engineering lead that conducts comprehensive code reviews. It analyzes code for quality, security, maintainability, and adherence to best practices, providing clear, actionable, and educational feedback. Use immediately after writing or modifying code.
+description: Reviews code for quality, security, and maintainability with actionable feedback. Use PROACTIVELY after writing or modifying code to catch issues before committing.
 tools: Read, Grep, Glob, Bash, LS, WebFetch, WebSearch, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking
 model: opus
 ---

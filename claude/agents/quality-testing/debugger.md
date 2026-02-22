@@ -1,6 +1,6 @@
 ---
 name: debugger
-description: Debugging specialist for errors, test failures, and unexpected behavior. Use proactively when encountering any issues.
+description: Debugs errors, test failures, and unexpected behavior via systematic root cause analysis. Use PROACTIVELY when encountering any runtime error, test failure, or unexpected behavior.
 tools: Read, Write, Edit, MultiEdit, Grep, Glob, Bash, LS, WebSearch, WebFetch, TodoWrite, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs, mcp__sequential-thinking__sequentialthinking
 model: opus
 ---
