@@ -7,10 +7,6 @@
     "allow": [
       "Bash(git add:*)"
     ],
-    "ask": [
-      "Bash(gh pr create:*)",
-      "Bash(git commit:*)"
-    ],
     "deny": [
       "Read(*.env)",
       "Read(./secrets/**)",
@@ -18,11 +14,18 @@
       "Bash(git push *)",
       "Bash(npm run *)"
     ],
+    "ask": [
+      "Bash(gh pr create:*)",
+      "Bash(git commit:*)"
+    ],
     "defaultMode": "default"
   },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
+  },
+  "enabledPlugins": {
+    "claude-md-management@claude-plugins-official": true
   },
   "teammateMode": "tmux"
 }
