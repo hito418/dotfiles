@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/core/_main.sh"
+
+##? Set up Claude Code MCP servers (Context7, GitHub, GitLab)
+##?
+##? Usage:
+##?    dot claude mcp
+
+docs::eval_help_first_arg "${@:1}"
+
+log::header "Claude Code MCP servers"
+
+log::note "Context7 — library documentation for LLMs"
+read -rp "Context7 API key (blank to skip): " context7_key
+if [[ -n "$context7_key" ]]; then
+  claude mcp add -s user --transport http --header "CONTEXT7_API_KEY: $context7_key" context7 https://mcp.context7.com/mcp
+  log::success "Context7 MCP added"
+else
+  log::success "Skipped"
+fi
+
+log::note "GitHub — repository, issue, and PR tools"
+read -rp "GitHub Personal Access Token (blank to skip): " github_pat
+if [[ -n "$github_pat" ]]; then
+  claude mcp add-json -s user github "{\"type\":\"http\",\"url\":\"https://api.githubcopilot.com/mcp/\",\"headers\":{\"Authorization\":\"Bearer $github_pat\"}}"
+  log::success "GitHub MCP added"
+else
+  log::success "Skipped"
+fi
+
+log::note "GitLab — merge request, issue, and pipeline tools"
+read -rp "Set up GitLab MCP? (Y/n) " setup_gitlab
+if [[ ! "$setup_gitlab" =~ ^[Nn]$ ]]; then
+  claude mcp add -s user --transport http gitlab https://gitlab.com/api/v4/mcp
+  log::success "GitLab MCP added (authenticate via /mcp in Claude Code)"
+else
+  log::success "Skipped"
+fi

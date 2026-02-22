@@ -28,6 +28,18 @@ fi
 log::note "Applying symlinks"
 apply_common_symlinks
 
+if platform::command_exists claude; then
+  log::success "Claude Code already installed"
+else
+  log::note "Installing Claude Code"
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+log::note "Installing Claude Code plugin: claude-md-management"
+claude plugin install claude-md-management@claude-plugins-official -s user
+
+"$DOTFILES_PATH/bin/dot" claude mcp
+
 log::note "Installing core Claude agents"
 packs::install "$HOME/.claude/agents" "$(packs::resolve core)"
 
