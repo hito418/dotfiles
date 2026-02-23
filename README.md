@@ -10,7 +10,7 @@ Configuration files and scripts for setting up and maintaining a development env
 | `claude/`    | Claude Code agents, skills, rules, and settings                  |
 | `conf/`      | Symlink mappings, APT package lists, and agent pack definitions  |
 | `git/`       | Git configuration, aliases, and attributes                       |
-| `scripts/`   | Core automation: bootstrap, update, package install, symlinks    |
+| `scripts/`   | Core automation: install, package management, symlinks           |
 | `ssh/`       | SSH client config with connection multiplexing and keep-alive    |
 | `terminal/`  | Zsh setup, aliases, functions, themes, and plugins               |
 | `tmux/`      | Tmux config with C-a prefix and vim-style navigation             |
@@ -29,8 +29,7 @@ This clones the repo, installs packages, creates symlinks, sets up Oh My Zsh, in
 ## Usage
 
 ```sh
-dot self bootstrap   # initial setup (packages, symlinks, Claude Code, git, zsh)
-dot self update      # pull latest changes, update packages and symlinks
+dot self install      # install or update dotfiles (idempotent)
 dot packages install # install packages from conf/apt.conf
 dot git setup        # configure git identity and GPG signing
 dot doc gpg          # show GPG signing guide
@@ -97,7 +96,7 @@ git, zsh, tmux, vim, bat, curl, fzf, ripgrep, fd-find, direnv, zoxide, jq
 
 ## Claude Code
 
-Bootstrap installs Claude Code with the `claude-md-management` plugin and sets up MCP servers interactively.
+`dot self install` installs Claude Code with the `claude-md-management` plugin and checks MCP server configuration.
 
 ### Agent packs
 
@@ -114,7 +113,7 @@ Agents are organized into packs that can be installed per-project with `dot clau
 | `devops`     | performance-monitor, architect-reviewer                                          |
 | `docs`       | api-documenter, documentation-expert                                             |
 
-The `core` pack is installed globally during bootstrap. Other packs are project-local.
+The `core` pack is installed globally during `dot self install`. Other packs are project-local.
 
 ### Skills
 
