@@ -5,8 +5,10 @@ self_update() {
 
   git fetch
   if [[ $(project_status) == "behind" ]]; then
-    log::note "Needs to pull!"
-    git pull && exit 0 || log::error "Failed"
+    log::note "Pulling latest changes"
+    git pull || { log::error "Failed to pull"; return 1; }
+    log::note "Dotfiles updated — re-run 'dot self install' to continue"
+    exit 0  # Intentional: stop running stale code after self-update
   fi
 }
 
@@ -24,7 +26,7 @@ update_submodules() {
 project_status() {
   cd "$DOTFILES_PATH" || exit
 
-  local -r UPSTREAM="main"
+  local -r UPSTREAM="origin/main"
   local -r LOCAL=$(git rev-parse @)
   local -r REMOTE=$(git rev-parse "$UPSTREAM")
   local -r BASE=$(git merge-base @ "$UPSTREAM")
