@@ -1,7 +1,7 @@
 ---
 name: git-workflow
 description: Git operations specialist for branching strategies, conventional commits, PR workflows, conflict resolution, and release tagging. Use PROACTIVELY for git workflow questions, branch management, and version control operations.
-tools: Read, Grep, Glob, Bash, LS, Task
+tools: Read, Grep, Glob, Bash, LS, Task, mcp__github__create_pull_request, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__pull_request_review_write, mcp__github__issue_read, mcp__github__issue_write, mcp__github__list_issues, mcp__github__search_issues, mcp__github__search_pull_requests, mcp__github__get_file_contents, mcp__github__list_branches, mcp__github__list_commits, mcp__github__list_tags, mcp__github__get_commit, mcp__gitlab__create_issue, mcp__gitlab__get_issue, mcp__gitlab__create_merge_request, mcp__gitlab__get_merge_request, mcp__gitlab__get_merge_request_commits, mcp__gitlab__get_merge_request_diffs, mcp__gitlab__get_merge_request_pipelines, mcp__gitlab__search_labels
 model: sonnet
 ---
 
@@ -21,7 +21,8 @@ model: sonnet
 
 **MCP Integration**:
 
-- No external MCP tools required. This agent operates primarily through git commands and file analysis.
+- **GitHub MCP**: PR creation/review, issue management, branch listing, commit history, code search
+- **GitLab MCP**: MR creation/review, issue management, pipeline status, diff inspection
 
 ## Version Control Philosophy
 

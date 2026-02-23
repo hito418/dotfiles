@@ -2,7 +2,7 @@
 name: create-issue
 description: Create a GitHub issue via gh CLI. Takes the user's description, drafts a clear title and structured body, and opens the issue assigned to the user. Use when the user says "create an issue", "open an issue", "file an issue", "make an issue", "new issue", or any variation requesting a GitHub issue.
 argument-hint: "<description>"
-allowed-tools: Bash(gh *), Bash(git *)
+allowed-tools: Bash(gh *), Bash(git *), mcp__github__issue_write, mcp__github__issue_read, mcp__github__list_issues, mcp__github__search_issues
 model: sonnet
 ---
 

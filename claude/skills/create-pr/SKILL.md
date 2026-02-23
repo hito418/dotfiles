@@ -2,7 +2,7 @@
 name: create-pr
 description: Create a GitHub pull request from the current branch. Auto-detects the base branch from upstream tracking, analyzes commits and diffs to generate a structured PR body (linked issues, summary, test plan), pushes the branch, creates the PR via gh CLI, and assigns it to the user. Use when the user says "make a pr", "create a pr", "open a pr", "submit a pr", "send a pr", "pr this", or any variation requesting a pull request. Accepts optional issue numbers as arguments to link in the PR body.
 argument-hint: "[#issue ...]"
-allowed-tools: Bash(git *), Bash(gh *), Read, Grep, Glob
+allowed-tools: Bash(git *), Bash(gh *), Read, Grep, Glob, mcp__github__create_pull_request, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__issue_read, mcp__github__list_issues, mcp__github__search_issues, mcp__github__get_file_contents, mcp__github__list_branches, mcp__github__list_commits
 model: sonnet
 ---
 

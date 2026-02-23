@@ -2,7 +2,7 @@
 name: create-issue-gl
 description: Create a GitLab issue via glab CLI. Takes the user's description, drafts a clear title and structured body, and opens the issue assigned to the user. Use when the user says "create a gitlab issue", "open a gitlab issue", "file a gitlab issue", "make a gitlab issue", "new gitlab issue", or any variation requesting a GitLab issue.
 argument-hint: "<description>"
-allowed-tools: Bash(glab *), Bash(git *)
+allowed-tools: Bash(glab *), Bash(git *), mcp__gitlab__create_issue, mcp__gitlab__get_issue, mcp__gitlab__search_labels
 model: sonnet
 ---
 
