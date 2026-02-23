@@ -2,7 +2,7 @@
 name: create-mr
 description: Create a GitLab merge request from the current branch. Auto-detects the target branch from upstream tracking, analyzes commits and diffs to generate a structured MR body (linked issues, summary, test plan), pushes the branch, creates the MR via glab CLI, and assigns it to the user. Use when the user says "make a mr", "create a mr", "open a mr", "submit a mr", "send a mr", "mr this", "merge request", or any variation requesting a merge request. Accepts optional issue numbers as arguments to link in the MR body.
 argument-hint: "[#issue ...]"
-allowed-tools: Bash(git *), Bash(glab *), Read, Grep, Glob
+allowed-tools: Bash(git *), Bash(glab *), Read, Grep, Glob, mcp__gitlab__create_merge_request, mcp__gitlab__get_merge_request, mcp__gitlab__get_issue, mcp__gitlab__create_issue, mcp__gitlab__get_merge_request_pipelines, mcp__gitlab__search_labels
 model: sonnet
 ---
 
