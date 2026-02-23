@@ -17,5 +17,13 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{${_tn_gold}%})%{${_tn_reset}%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=""
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-PROMPT='%{${_tn_red}%}@%n%{${_tn_reset}%} %{${_tn_green}%}➜%{${_tn_reset}%}  %{${_tn_blue}%}%1~%{${_tn_reset}%}$(git_prompt_info)%(?.. %{${_tn_yellow}%}'$'\uf119''%{${_tn_reset}%})
-%{${_tn_pistachio}%}❯%{${_tn_reset}%} '
+# Prompt segments
+local user="%{${_tn_red}%}@%n%{${_tn_reset}%}"               # @username in red
+local arrow="%{${_tn_green}%}➜%{${_tn_reset}%}"             # green arrow
+local cwd="%{${_tn_blue}%}%1~%{${_tn_reset}%}"               # current dir in blue
+local git='$(git_prompt_info)'                               # branch name (lazy eval)
+local error="%(?.. %{${_tn_red}%}✘%{${_tn_reset}%})"         # cross on non-zero exit
+local prompt_char="%{${_tn_pistachio}%}❯%{${_tn_reset}%}"    # green ❯ on newline
+
+PROMPT="${user} ${arrow}  ${cwd}${git}${error}
+${prompt_char} "
