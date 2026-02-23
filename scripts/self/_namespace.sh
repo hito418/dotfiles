@@ -4,5 +4,4 @@
 ##?    dot self <command>
 ##?
 ##? Commands:
-##?    bootstrap   Bootstrap a fresh system
-##?    update      Update dotfiles and symlinks
+##?    install   Install or update dotfiles (idempotent)

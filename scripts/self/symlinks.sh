@@ -8,20 +8,23 @@ apply_symlinks() {
     return 1
   fi
 
-  while IFS='=' read -r target source; do
+  while IFS='=' read -r target src; do
     [[ -z "$target" || "$target" =~ ^[[:space:]]*# ]] && continue
 
-    target=$(echo "$target" | xargs)
-    source=$(echo "$source" | xargs)
+    target="${target#"${target%%[![:space:]]*}"}"
+    target="${target%"${target##*[![:space:]]}"}"
+    src="${src#"${src%%[![:space:]]*}"}"
+    src="${src%"${src##*[![:space:]]}"}"
     target="${target/#\~/$HOME}"
-    source="$DOTFILES_PATH/$source"
+    src="$DOTFILES_PATH/$src"
 
     mkdir -p "$(dirname "$target")"
     if [[ -d "$target" && ! -L "$target" ]]; then
-      rm -rf "$target"
+      log::warning "Replacing directory $target (backed up to ${target}.bak)"
+      mv "$target" "${target}.bak"
     fi
-    ln -sfn "$source" "$target"
-    log::success "Linked $target → $source"
+    ln -sfn "$src" "$target"
+    log::success "Linked $target → $src"
   done < "$config"
 }
 

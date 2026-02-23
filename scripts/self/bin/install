@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/_core/_main.sh"
+source "$DOTFILES_PATH/scripts/self/git.sh"
+source "$DOTFILES_PATH/scripts/self/symlinks.sh"
+source "$DOTFILES_PATH/scripts/self/shell.sh"
+source "$DOTFILES_PATH/scripts/packages/apt.sh"
+source "$DOTFILES_PATH/scripts/claude/packs.sh"
+source "$DOTFILES_PATH/scripts/claude/claude.sh"
+source "$DOTFILES_PATH/scripts/claude/mcp.sh"
+
+##? Install or update dotfiles — safe to run on a fresh or existing system
+#
+# Idempotent: every step guards itself, so running this twice is a no-op.
+# On a fresh system it does the full setup; on an existing one it converges
+# to the latest state.
+
+# Cache sudo credentials upfront so later steps don't prompt mid-run.
+sudo -v
+
+# Pull latest repo changes. If something was fetched, the script exits
+# here and asks the user to re-run (avoids executing stale code).
+self_update
+
+log::header "System"
+
+log::note "Installing system packages"
+apt::install_all
+
+log::note "Setting up Oh My Zsh"
+install_oh_my_zsh
+
+if has_submodules; then
+  log::note "Updating submodules"
+  update_submodules
+fi
+
+log::note "Applying symlinks"
+apply_common_symlinks
+
+log::header "Claude Code"
+
+log::note "Checking Claude Code installation"
+claude::ensure_installed
+
+log::note "Installing plugins"
+claude::ensure_plugins
+
+log::note "Installing core agents"
+packs::install "$HOME/.claude/agents" "$(packs::resolve core)"
+
+log::note "Checking MCP servers"
+mcp::ensure_all
+
+log::header "Environment"
+
+log::note "Setting up SSH sockets directory"
+mkdir -p ~/.ssh/sockets
+chmod 700 ~/.ssh/sockets
+
+if [[ -z "$(git config --global user.email)" ]]; then
+  log::note "Setting up git identity"
+  "$DOTFILES_PATH/bin/dot" git setup
+else
+  log::success "Git identity already configured"
+fi
+
+log::note "Setting zsh as default shell"
+set_default_shell
+
+log::success "Dotfiles installed!"
