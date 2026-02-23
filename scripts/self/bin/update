@@ -7,6 +7,8 @@ source "$DOTFILES_PATH/scripts/self/git.sh"
 source "$DOTFILES_PATH/scripts/self/symlinks.sh"
 source "$DOTFILES_PATH/scripts/self/shell.sh"
 source "$DOTFILES_PATH/scripts/claude/packs.sh"
+source "$DOTFILES_PATH/scripts/claude/mcp.sh"
+source "$DOTFILES_PATH/scripts/claude/claude.sh"
 
 ##? Update dotfiles, packages, and symlinks
 
@@ -24,7 +26,13 @@ fi
 log::note "Applying symlinks"
 apply_common_symlinks
 
+claude::ensure_installed
+claude::ensure_plugins
+
 log::note "Installing core Claude agents"
 packs::install "$HOME/.claude/agents" "$(packs::resolve core)"
+
+log::note "Checking MCP servers"
+mcp::ensure_servers
 
 log::success "Dotfiles updated!"
