@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$DOTFILES_PATH/scripts/core/_main.sh"
+source "$DOTFILES_PATH/scripts/_core/_main.sh"
 
 ##? Set up Claude Code MCP servers (Context7, GitHub, GitLab)
 ##?
