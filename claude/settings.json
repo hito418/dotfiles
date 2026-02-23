@@ -5,7 +5,11 @@
   },
   "permissions": {
     "allow": [
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(ls*)",
+      "Bash(cat*)",
+      "WebFetch",
+      "Task(Explore)",
     ],
     "deny": [
       "Read(*.env)",
