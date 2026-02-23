@@ -5,18 +5,22 @@
   },
   "permissions": {
     "allow": [
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(ls*)",
+      "Bash(cat*)",
+      "WebFetch",
+      "Task(Explore)",
     ],
     "deny": [
       "Read(*.env)",
       "Read(./secrets/**)",
-      "Bash(git * main)",
-      "Bash(git push *)",
       "Bash(npm run *)"
     ],
     "ask": [
       "Bash(gh pr create:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git * main)",
+      "Bash(git push *)"
     ],
     "defaultMode": "default"
   },
