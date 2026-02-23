@@ -5,15 +5,24 @@
   },
   "permissions": {
     "allow": [
-      "Bash(git add:*)",
-      "Bash(ls*)",
-      "Bash(cat*)",
+      "Bash(git add *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(which *)",
+      "Bash(echo *)",
+      "Bash(tail *)",
+      "Bash(head *)",
       "WebFetch",
-      "Task(Explore)"
+      "Task(Explore)",
+      "Task(Read)"
     ],
     "deny": [
       "Read(*.env)",
       "Read(./secrets/**)",
+      "Bash(cat *.env)",
+      "Bash(cat *secrets*)",
       "Bash(npm run *)"
     ],
     "ask": [
