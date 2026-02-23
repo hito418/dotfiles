@@ -9,7 +9,7 @@
       "Bash(ls*)",
       "Bash(cat*)",
       "WebFetch",
-      "Task(Explore)",
+      "Task(Explore)"
     ],
     "deny": [
       "Read(*.env)",
