@@ -16,7 +16,7 @@ apt::read_conf() {
     packages+=("$line")
   done < "$config"
 
-  echo "${packages[@]}"
+  [[ ${#packages[@]} -gt 0 ]] && echo "${packages[@]}"
 }
 
 apt::install_from_conf() {
@@ -40,6 +40,22 @@ apt::add_github_cli_repo() {
   echo "deb [arch=$(dpkg --print-architecture) signed-by=$keyring] https://cli.github.com/packages stable main" \
     | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
   log::success "GitHub CLI repo added"
+}
+
+apt::fix_batcat() {
+  if platform::command_exists batcat && ! platform::command_exists bat; then
+    mkdir -p "$HOME/.local/bin"
+    ln -sf /usr/bin/batcat "$HOME/.local/bin/bat"
+    log::success "Linked batcat → bat"
+  fi
+}
+
+apt::install_all() {
+  apt::add_github_cli_repo
+  sudo apt update -y
+  apt::install_from_conf "apt.conf"
+  apt::install_packages gh
+  apt::fix_batcat
 }
 
 apt::install_packages() {
