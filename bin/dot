@@ -20,7 +20,7 @@ set -euo pipefail
 export DOTFILES_PATH
 DOTFILES_PATH="$(cd "$(dirname "$0")/.." && pwd)"
 
-source "$DOTFILES_PATH/scripts/core/_main.sh"
+source "$DOTFILES_PATH/scripts/_core/_main.sh"
 
 # Separate positional args from flags
 args=()
