@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/_core/_main.sh"
+
+##? Remove unused Docker containers, images, networks, and volumes
+##?
+##? Usage:
+##?    dot docker prune
+
+if ! platform::command_exists docker; then
+  log::error "Docker is not installed"
+  exit 1
+fi
+
+running=$(docker ps -aq)
+if [[ -n "$running" ]]; then
+  log::note "Stopping all running containers"
+  docker stop $running
+fi
+
+log::note "Pruning unused containers, images, networks, and volumes"
+yes | docker system prune -af --volumes
+
+log::success "Docker pruned!"
