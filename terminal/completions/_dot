@@ -1,0 +1,56 @@
+#compdef dot
+
+# Completion for the dotfiles CLI (dot <namespace> <command>)
+
+_dot_extract_desc() {
+  local file="$1"
+  sed -n 's/^##? *//p' "$file" | head -1
+}
+
+_dot() {
+  local dotfiles="${DOTFILES_PATH:-$HOME/.dotfiles}"
+  local -a namespaces self_commands
+
+  case $CURRENT in
+    2)
+      # First arg: namespaces + self shortcut commands
+      for ns_dir in "$dotfiles"/scripts/*/bin(/N); do
+        local ns="${ns_dir:h:t}"
+        local ns_file="${ns_dir:h}/_namespace.sh"
+        local desc=""
+        [[ -f "$ns_file" ]] && desc="$(_dot_extract_desc "$ns_file")"
+        # Strip "dot <name> - " prefix from description
+        desc="${desc#dot $ns - }"
+        namespaces+=("${ns}:${desc}")
+      done
+
+      # Self shortcuts: expose self commands as top-level completions
+      for cmd in "$dotfiles"/scripts/self/bin/*(N:t); do
+        local desc=""
+        desc="$(_dot_extract_desc "$dotfiles/scripts/self/bin/$cmd")"
+        self_commands+=("${cmd}:${desc}")
+      done
+
+      local -a completions=("${self_commands[@]}" "${namespaces[@]}")
+      _describe -V 'command' completions
+      ;;
+    3)
+      # Second arg: commands within the selected namespace
+      local ns="${words[2]}"
+      local ns_bin="$dotfiles/scripts/$ns/bin"
+      local -a commands
+
+      [[ -d "$ns_bin" ]] || return 1
+
+      for cmd in "$ns_bin"/*(N:t); do
+        local desc=""
+        desc="$(_dot_extract_desc "$ns_bin/$cmd")"
+        commands+=("${cmd}:${desc}")
+      done
+
+      _describe 'command' commands
+      ;;
+  esac
+}
+
+_dot "$@"
