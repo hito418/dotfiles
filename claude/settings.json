@@ -5,16 +5,18 @@
     },
     "permissions": {
         "allow": [
-            "Bash(git add *)",
-            "Bash(ls *)",
-            "Bash(cat *)",
-            "Bash(find *)",
-            "Bash(grep *)",
-            "Bash(which *)",
-            "Bash(echo *)",
-            "Bash(tail *)",
-            "Bash(head *)",
-            "WebFetch",
+            "Agent(Explore)",
+            "Bash(git add:*)",
+            "Bash(ls:*)",
+            "Bash(cat:*)",
+            "Bash(find:*)",
+            "Bash(grep:*)",
+            "Bash(which:*)",
+            "Bash(echo:*)",
+            "Bash(tail:*)",
+            "Bash(head:*)",
+            "Bash(awk:*)",
+            "WebFetch"
         ],
         "deny": [
             "Read(*.env)",
