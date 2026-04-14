@@ -3,6 +3,58 @@
 readonly PACKS_DIR="$DOTFILES_PATH/conf/claude/packs"
 readonly AGENTS_DIR="$DOTFILES_PATH/claude/agents"
 
+# Directory-symlink resources: name → source directory under claude/
+declare -rA RESOURCES=(
+    [rules]="$DOTFILES_PATH/claude/rules"
+    [skills]="$DOTFILES_PATH/claude/skills"
+)
+
+packs::is_resource() {
+    [[ -n "${RESOURCES[$1]:-}" ]]
+}
+
+packs::resolve_target() {
+    local -r scope="$1"  # "global" or "project"
+    case "$scope" in
+        project) echo "$(pwd)/.claude" ;;
+        global)  echo "$HOME/.claude" ;;
+        *) log::error "Unknown scope: $scope"; return 1 ;;
+    esac
+}
+
+packs::install_resource() {
+    local -r name="$1"
+    local -r target_base="$2"
+    local -r source="${RESOURCES[$name]}"
+    local -r link="$target_base/$name"
+
+    mkdir -p "$target_base"
+
+    if [[ -L "$link" && "$(readlink "$link")" == "$source" ]]; then
+        log::note "$name already linked"
+        return 0
+    fi
+    if [[ -e "$link" && ! -L "$link" ]]; then
+        log::error "$link exists and is not a symlink; refusing to overwrite"
+        return 1
+    fi
+    ln -sfn "$source" "$link"
+    log::success "Linked $name → $link"
+}
+
+packs::uninstall_resource() {
+    local -r name="$1"
+    local -r target_base="$2"
+    local -r link="$target_base/$name"
+
+    if [[ -L "$link" ]]; then
+        rm "$link"
+        log::success "Removed $name symlink"
+    else
+        log::note "$name not linked at $link"
+    fi
+}
+
 packs::read_conf() {
     local -r conf="$1"
     grep -v '^\s*#' "$conf" | grep -v '^\s*$'

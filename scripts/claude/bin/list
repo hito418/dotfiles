@@ -5,16 +5,34 @@ set -euo pipefail
 source "$DOTFILES_PATH/scripts/_core/_main.sh"
 source "$DOTFILES_PATH/scripts/claude/packs.sh"
 
-##? Show available packs and installed agents in current project
+##? Show available packs and installed rules/agents
 ##?
 ##? Usage:
-##?    dot claude list
+##?    dot claude list [--project]
+##?
+##? Options:
+##?    --project        Inspect current project's .claude/ (default: ~/.claude)
 
 docs::eval_help_first_arg "${@:1}"
 
-log::header "Available packs"
+scope="global"
+for arg in "$@"; do
+    case "$arg" in
+        --project|--local) scope="project" ;;
+    esac
+done
+
+target_base="$(packs::resolve_target "$scope")"
+
+log::header "Available"
+for resource in "${!RESOURCES[@]}"; do
+    printf "  %-14s %s\n" "$resource" "claude/$resource directory"
+done
 packs::list_available
 
 echo ""
-log::header "Installed agents"
-packs::list_installed "$(pwd)/.claude/agents"
+log::header "Installed at $target_base"
+for resource in "${!RESOURCES[@]}"; do
+    [[ -L "$target_base/$resource" ]] && printf "  %s\n" "$resource"
+done
+packs::list_installed "$target_base/agents"

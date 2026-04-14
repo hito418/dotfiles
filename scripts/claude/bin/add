@@ -5,31 +5,50 @@ set -euo pipefail
 source "$DOTFILES_PATH/scripts/_core/_main.sh"
 source "$DOTFILES_PATH/scripts/claude/packs.sh"
 
-##? Symlink pack agents into the current project's .claude/agents/
+##? Symlink Claude rules, skills and/or agent packs into ~/.claude (or a project)
 ##?
 ##? Usage:
-##?    dot claude add <packs>...
+##?    dot claude add [--project] <names>...
+##?
+##? Names:
+##?    rules            Symlink the rules directory
+##?    skills           Symlink the skills directory
+##?    <pack>           Install an agent pack (see: dot claude list)
+##?
+##? Options:
+##?    --project        Target current project's .claude/ (default: ~/.claude)
 ##?
 ##? Examples:
-##?    dot claude add fullstack react
-##?    dot claude add fullstack,react
+##?    dot claude add rules skills fullstack
+##?    dot claude add --project react
+##?    dot claude add rules,core
 
 docs::eval_help_first_arg "${@:1}"
 
-if [[ $# -eq 0 ]]; then
-    log::error "Usage: dot claude add <packs>..."
+scope="global"
+names=()
+for arg in "$@"; do
+    case "$arg" in
+        --project|--local) scope="project" ;;
+        -*) log::error "Unknown option: $arg"; exit 1 ;;
+        *) names+=("$arg") ;;
+    esac
+done
+
+if [[ ${#names[@]} -eq 0 ]]; then
+    log::error "Usage: dot claude add [--project] <names>..."
     exit 1
 fi
 
-if [[ ! -d ".git" ]]; then
-    log::error "Not a git repository. Run this from a project root."
-    exit 1
-fi
+target_base="$(packs::resolve_target "$scope")"
+mkdir -p "$target_base"
 
-target_dir="$(pwd)/.claude/agents"
-
-while IFS= read -r pack; do
-    conf=$(packs::resolve "$pack") || exit 1
-    log::note "Installing pack: $pack"
-    packs::install "$target_dir" "$conf"
-done <<< "$(packs::parse_names "$@")"
+while IFS= read -r name; do
+    if packs::is_resource "$name"; then
+        packs::install_resource "$name" "$target_base"
+    else
+        conf=$(packs::resolve "$name") || exit 1
+        log::note "Installing pack: $name"
+        packs::install "$target_base/agents" "$conf"
+    fi
+done <<< "$(packs::parse_names "${names[@]}")"

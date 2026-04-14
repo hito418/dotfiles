@@ -33,10 +33,12 @@ dot self install      # install or update dotfiles (idempotent)
 dot packages install # install packages from conf/apt.conf
 dot git setup        # configure git identity and GPG signing
 dot doc gpg          # show GPG signing guide
-dot claude add <packs>...    # install agent packs into current project
-dot claude remove <packs>... # remove agent packs from current project
-dot claude list              # show available packs and installed agents
+dot claude add <names>...    # symlink rules/skills/agent packs (default: ~/.claude)
+dot claude remove <names>... # remove rules/skills/agent pack symlinks
+dot claude list              # show available and installed rules/skills/agents
 dot claude mcp               # interactive MCP server setup
+
+# Add --project to any of the above to target ./.claude/ instead of ~/.claude/
 ```
 
 ## Key packages
@@ -98,9 +100,17 @@ git, zsh, tmux, vim, bat, curl, fzf, ripgrep, fd-find, direnv, zoxide, jq
 
 `dot self install` installs Claude Code with the `claude-md-management` plugin and checks MCP server configuration.
 
-### Agent packs
+### Rules, skills and agent packs
 
-Agents are organized into packs that can be installed per-project with `dot claude add <pack>`:
+Rules (`claude/rules/*.md`), skills (`claude/skills/`) and agent packs are installed into `~/.claude/` by default via `dot claude add <names>...`. Pass `--project` to target the current project's `.claude/` instead (created if missing).
+
+```sh
+dot claude add rules skills core   # link rules, skills + core agents globally
+dot claude add --project react     # link react pack into ./.claude/agents/
+dot claude remove skills           # unlink skills from ~/.claude/
+```
+
+Agents are organized into packs:
 
 | Pack         | Agents                                                                           |
 | ------------ | -------------------------------------------------------------------------------- |
@@ -113,7 +123,7 @@ Agents are organized into packs that can be installed per-project with `dot clau
 | `devops`     | performance-monitor, architect-reviewer                                          |
 | `docs`       | api-documenter, documentation-expert                                             |
 
-The `core` pack is installed globally during `dot self install`. Other packs are project-local.
+The `core` pack is installed globally during `dot self install`. Rules, skills and other packs are opt-in via `dot claude add`.
 
 ### Skills
 
