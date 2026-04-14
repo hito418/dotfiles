@@ -3,58 +3,6 @@
 readonly PACKS_DIR="$DOTFILES_PATH/conf/claude/packs"
 readonly AGENTS_DIR="$DOTFILES_PATH/claude/agents"
 
-# Directory-symlink resources: name → source directory under claude/
-declare -rA RESOURCES=(
-    [rules]="$DOTFILES_PATH/claude/rules"
-    [skills]="$DOTFILES_PATH/claude/skills"
-)
-
-packs::is_resource() {
-    [[ -n "${RESOURCES[$1]:-}" ]]
-}
-
-packs::resolve_target() {
-    local -r scope="$1"  # "global" or "project"
-    case "$scope" in
-        project) echo "$(pwd)/.claude" ;;
-        global)  echo "$HOME/.claude" ;;
-        *) log::error "Unknown scope: $scope"; return 1 ;;
-    esac
-}
-
-packs::install_resource() {
-    local -r name="$1"
-    local -r target_base="$2"
-    local -r source="${RESOURCES[$name]}"
-    local -r link="$target_base/$name"
-
-    mkdir -p "$target_base"
-
-    if [[ -L "$link" && "$(readlink "$link")" == "$source" ]]; then
-        log::note "$name already linked"
-        return 0
-    fi
-    if [[ -e "$link" && ! -L "$link" ]]; then
-        log::error "$link exists and is not a symlink; refusing to overwrite"
-        return 1
-    fi
-    ln -sfn "$source" "$link"
-    log::success "Linked $name → $link"
-}
-
-packs::uninstall_resource() {
-    local -r name="$1"
-    local -r target_base="$2"
-    local -r link="$target_base/$name"
-
-    if [[ -L "$link" ]]; then
-        rm "$link"
-        log::success "Removed $name symlink"
-    else
-        log::note "$name not linked at $link"
-    fi
-}
-
 packs::read_conf() {
     local -r conf="$1"
     grep -v '^\s*#' "$conf" | grep -v '^\s*$'
@@ -70,16 +18,6 @@ packs::resolve() {
     fi
 
     echo "$conf"
-}
-
-packs::parse_names() {
-    local result=()
-    for arg in "$@"; do
-        while IFS= read -r name; do
-            [[ -n "$name" ]] && result+=("$name")
-        done <<< "$(str::split "$arg" ",")"
-    done
-    printf '%s\n' "${result[@]}"
 }
 
 packs::find_agent() {
@@ -134,7 +72,7 @@ packs::uninstall() {
 packs::list_available() {
     local pack agents
 
-    # Show core first with user-scope hint
+    # Core first with user-scope hint
     agents=$(packs::read_conf "$PACKS_DIR/core.conf" | tr '\n' ', ' | sed 's/,$//')
     printf "  %-14s %s  (global)\n" "core" "$agents"
 
@@ -150,7 +88,7 @@ packs::list_installed() {
     local -r target_dir="$1"
 
     if [[ ! -d "$target_dir" ]]; then
-        log::note "No agents installed in this project"
+        log::note "No agents installed"
         return
     fi
 
@@ -162,6 +100,6 @@ packs::list_installed() {
     done
 
     if ! $found; then
-        log::note "No agents installed in this project"
+        log::note "No agents installed"
     fi
 }

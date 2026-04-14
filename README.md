@@ -33,12 +33,12 @@ dot self install      # install or update dotfiles (idempotent)
 dot packages install # install packages from conf/apt.conf
 dot git setup        # configure git identity and GPG signing
 dot doc gpg          # show GPG signing guide
-dot claude add <names>...    # symlink rules/skills/agent packs (default: ~/.claude)
-dot claude remove <names>... # remove rules/skills/agent pack symlinks
-dot claude list              # show available and installed rules/skills/agents
-dot claude mcp               # interactive MCP server setup
+dot claude packs  {add|remove|list} [--project] [<pack>...]   # agent packs
+dot claude rules  {add|remove|list} [--project] [<rule>...]   # rule files
+dot claude skills {add|remove|list} [--project] [<skill>...]  # skill dirs
+dot claude mcp                                                # MCP setup
 
-# Add --project to any of the above to target ./.claude/ instead of ~/.claude/
+# --project targets ./.claude/ instead of ~/.claude/ (created if missing).
 ```
 
 ## Key packages
@@ -102,12 +102,14 @@ git, zsh, tmux, vim, bat, curl, fzf, ripgrep, fd-find, direnv, zoxide, jq
 
 ### Rules, skills and agent packs
 
-Rules (`claude/rules/*.md`), skills (`claude/skills/`) and agent packs are installed into `~/.claude/` by default via `dot claude add <names>...`. Pass `--project` to target the current project's `.claude/` instead (created if missing).
+Rules (`claude/rules/*.md`), skills (`claude/skills/*/`) and agent packs install into `~/.claude/` as per-item symlinks. Three parallel subcommands — `packs`, `rules`, `skills` — each support `add`, `remove`, `list`, with an optional `--project` flag to target `./.claude/` instead.
 
 ```sh
-dot claude add rules skills core   # link rules, skills + core agents globally
-dot claude add --project react     # link react pack into ./.claude/agents/
-dot claude remove skills           # unlink skills from ~/.claude/
+dot claude rules  add git process         # link git.md + process.md globally
+dot claude skills add commit create-pr    # link two skills globally
+dot claude packs  add fullstack           # install the fullstack agent pack
+dot claude rules  add --project code-style  # project-scoped
+dot claude skills list --project            # what's installed here?
 ```
 
 Agents are organized into packs:
@@ -123,7 +125,7 @@ Agents are organized into packs:
 | `devops`     | performance-monitor, architect-reviewer                                          |
 | `docs`       | api-documenter, documentation-expert                                             |
 
-The `core` pack is installed globally during `dot self install`. Rules, skills and other packs are opt-in via `dot claude add`.
+The `core` pack is installed globally during `dot self install`. Rules, skills and other packs are opt-in via the subcommands above.
 
 ### Skills
 

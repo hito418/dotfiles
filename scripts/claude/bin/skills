@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/_core/_main.sh"
+source "$DOTFILES_PATH/scripts/claude/_common.sh"
+source "$DOTFILES_PATH/scripts/claude/skills.sh"
+
+##? Manage Claude Code skills (per-skill symlinks)
+##?
+##? Usage:
+##?    dot claude skills add [--project] <skill>...
+##?    dot claude skills remove [--project] <skill>...
+##?    dot claude skills list [--project]
+##?
+##? Options:
+##?    --project        Target current project's .claude/ (default: ~/.claude)
+##?
+##? Examples:
+##?    dot claude skills add commit create-pr
+##?    dot claude skills add --project review-pr
+##?    dot claude skills list
+
+docs::eval_help_first_arg "${@:1}"
+
+verb="${1:-}"
+shift 2>/dev/null || true
+
+scope="global"
+names=()
+for arg in "$@"; do
+    case "$arg" in
+        --project|--local) scope="project" ;;
+        -*) log::error "Unknown option: $arg"; exit 1 ;;
+        *) names+=("$arg") ;;
+    esac
+done
+
+target_base="$(claude::resolve_target "$scope")"
+
+case "$verb" in
+    add)
+        if [[ ${#names[@]} -eq 0 ]]; then
+            log::error "Usage: dot claude skills add [--project] <skill>..."
+            exit 1
+        fi
+        mkdir -p "$target_base"
+        while IFS= read -r name; do
+            skills::install "$name" "$target_base" || exit 1
+        done <<< "$(claude::parse_names "${names[@]}")"
+        ;;
+    remove)
+        if [[ ${#names[@]} -eq 0 ]]; then
+            log::error "Usage: dot claude skills remove [--project] <skill>..."
+            exit 1
+        fi
+        if [[ ! -d "$target_base" ]]; then
+            log::note "No .claude at $target_base"
+            exit 0
+        fi
+        while IFS= read -r name; do
+            skills::uninstall "$name" "$target_base"
+        done <<< "$(claude::parse_names "${names[@]}")"
+        ;;
+    list)
+        log::header "Available skills"
+        skills::list_available
+        echo ""
+        log::header "Installed at $target_base"
+        skills::list_installed "$target_base"
+        ;;
+    *)
+        log::error "Usage: dot claude skills {add|remove|list} [--project] [<skill>...]"
+        exit 1
+        ;;
+esac
