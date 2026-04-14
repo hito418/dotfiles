@@ -1,16 +1,16 @@
 ---
 name: create-pr
-description: Create a GitHub pull request from the current branch. Auto-detects the base branch from upstream tracking, analyzes commits and diffs to generate a structured PR body (linked issues, summary, test plan), pushes the branch, creates the PR via gh CLI, and assigns it to the user. Use when the user says "make a pr", "create a pr", "open a pr", "submit a pr", "send a pr", "pr this", or any variation requesting a pull request. Accepts optional issue numbers as arguments to link in the PR body.
+description: Create a pull request (GitHub) or merge request (GitLab) from the current branch, auto-detecting the platform from the git remote. Analyzes commits and diffs to generate a structured body (linked issues, summary, test plan), pushes the branch, and assigns the PR/MR to the user. Use when the user says "make a pr", "create a pr", "open a pr", "make a mr", "merge request", "pr this", or any variation requesting a pull/merge request. Accepts optional issue numbers as arguments to link in the body.
 argument-hint: "[#issue ...]"
-allowed-tools: Bash(git *), Bash(gh *), Read, Grep, Glob, mcp__github__create_pull_request, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__issue_read, mcp__github__list_issues, mcp__github__search_issues, mcp__github__get_file_contents, mcp__github__list_branches, mcp__github__list_commits
+allowed-tools: Bash(git *:*), Bash(gh *:*), Bash(glab *:*), Bash(scripts/*:*), Read, Grep, Glob
 model: sonnet
 ---
 
-# PR Creation
+# PR / MR Creation
 
 ## Arguments
 
-`$ARGUMENTS` — optional issue numbers (e.g., `#12`, `34`). Strip `#` prefixes for `gh` commands.
+`$ARGUMENTS` — optional issue numbers (e.g., `#12`, `34`). Strip `#` prefixes when passing to CLIs.
 
 ## Workflow
 
@@ -19,16 +19,15 @@ model: sonnet
 Run in parallel:
 
 ```
-git branch --show-current           # → $HEAD
-git rev-parse --abbrev-ref HEAD@{upstream} 2>/dev/null | sed 's|origin/||'  # → $BASE (fallback: main)
-gh repo view --json owner,name -q '.owner.login + "/" + .name'              # → $REPO
+git branch --show-current                                                     # → $HEAD
+git rev-parse --abbrev-ref HEAD@{upstream} 2>/dev/null | sed 's|origin/||'    # → $BASE (fallback: main)
 ```
 
 If `$HEAD` is the main/default branch, create and switch to a feature branch before proceeding.
 
 ### 2. Commit uncommitted changes
 
-If there are staged or unstaged changes, commit them using the `commit` skill workflow (atomic, conventional commits grouped by concern) before proceeding.
+If there are staged or unstaged changes, commit them using the `commit` skill workflow (atomic, conventional commits grouped by concern).
 
 ### 3. Analyze changes
 
@@ -39,17 +38,16 @@ git diff $BASE...$HEAD --stat
 
 Read changed files as needed to understand the changes.
 
-### 4. Fetch issue context
-
-If issue numbers were provided in `$ARGUMENTS`, fetch each:
+### 4. Fetch issue context (if issue numbers provided)
 
 ```
-gh issue view <number> --json title,body,labels
+gh issue view <number>    # GitHub
+glab issue view <number>  # GitLab
 ```
 
-Use issue titles and context to inform the PR summary.
+Use whichever CLI matches the repo. Skip if no numbers given.
 
-### 5. Draft PR title and body
+### 5. Draft title and body
 
 **Title**: conventional commit style, under 72 chars (e.g., `feat: add user auth flow`).
 
@@ -71,22 +69,18 @@ Closes #M
 - [ ] <concrete verification steps>
 ```
 
-- Omit "Linked issues" section entirely if no issues provided.
+- Omit "Linked issues" entirely if no issues provided.
 - Derive summary from commit messages and diff analysis, not generic filler.
-- Test plan should list specific, actionable checks.
+- Test plan lists specific, actionable checks.
 
-### 6. Push and create PR
+### 6. Create the PR/MR
 
-Push the branch if it has no upstream or is ahead of remote:
-
-```
-git push -u origin $HEAD
-```
-
-Create the PR:
+Invoke the helper. It detects GitHub vs. GitLab from the remote, pushes the branch, and prints the URL.
 
 ```
-gh pr create --base $BASE --head $HEAD --title "<title>" --body "<body>" --assignee @me
+scripts/open_pr.py --title "<title>" --body "<body>"
 ```
 
-Report the PR URL to the user.
+Pass `--base <branch>` only if the auto-detected base is wrong.
+
+Report the printed URL to the user.

@@ -20,16 +20,6 @@ packs::resolve() {
     echo "$conf"
 }
 
-packs::parse_names() {
-    local result=()
-    for arg in "$@"; do
-        while IFS= read -r name; do
-            [[ -n "$name" ]] && result+=("$name")
-        done <<< "$(str::split "$arg" ",")"
-    done
-    printf '%s\n' "${result[@]}"
-}
-
 packs::find_agent() {
     local -r name="$1"
     local match
@@ -82,7 +72,7 @@ packs::uninstall() {
 packs::list_available() {
     local pack agents
 
-    # Show core first with user-scope hint
+    # Core first with user-scope hint
     agents=$(packs::read_conf "$PACKS_DIR/core.conf" | tr '\n' ', ' | sed 's/,$//')
     printf "  %-14s %s  (global)\n" "core" "$agents"
 
@@ -98,7 +88,7 @@ packs::list_installed() {
     local -r target_dir="$1"
 
     if [[ ! -d "$target_dir" ]]; then
-        log::note "No agents installed in this project"
+        log::note "No agents installed"
         return
     fi
 
@@ -110,6 +100,6 @@ packs::list_installed() {
     done
 
     if ! $found; then
-        log::note "No agents installed in this project"
+        log::note "No agents installed"
     fi
 }

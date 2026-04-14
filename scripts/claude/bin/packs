@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTFILES_PATH/scripts/_core/_main.sh"
+source "$DOTFILES_PATH/scripts/claude/_common.sh"
+source "$DOTFILES_PATH/scripts/claude/packs.sh"
+
+##? Manage Claude Code agent packs
+##?
+##? Usage:
+##?    dot claude packs add [--project] <pack>...
+##?    dot claude packs remove [--project] <pack>...
+##?    dot claude packs list [--project]
+##?
+##? Options:
+##?    --project        Target current project's .claude/ (default: ~/.claude)
+##?
+##? Examples:
+##?    dot claude packs add fullstack,react
+##?    dot claude packs remove --project react
+##?    dot claude packs list
+
+docs::eval_help_first_arg "${@:1}"
+
+verb="${1:-}"
+shift 2>/dev/null || true
+
+scope="global"
+names=()
+for arg in "$@"; do
+    case "$arg" in
+        --project|--local) scope="project" ;;
+        -*) log::error "Unknown option: $arg"; exit 1 ;;
+        *) names+=("$arg") ;;
+    esac
+done
+
+target_base="$(claude::resolve_target "$scope")"
+
+case "$verb" in
+    add)
+        if [[ ${#names[@]} -eq 0 ]]; then
+            log::error "Usage: dot claude packs add [--project] <pack>..."
+            exit 1
+        fi
+        mkdir -p "$target_base"
+        while IFS= read -r name; do
+            conf=$(packs::resolve "$name") || exit 1
+            log::note "Installing pack: $name"
+            packs::install "$target_base/agents" "$conf"
+        done <<< "$(claude::parse_names "${names[@]}")"
+        ;;
+    remove)
+        if [[ ${#names[@]} -eq 0 ]]; then
+            log::error "Usage: dot claude packs remove [--project] <pack>..."
+            exit 1
+        fi
+        if [[ ! -d "$target_base" ]]; then
+            log::note "No .claude at $target_base"
+            exit 0
+        fi
+        while IFS= read -r name; do
+            conf=$(packs::resolve "$name") || exit 1
+            log::note "Removing pack: $name"
+            packs::uninstall "$target_base/agents" "$conf"
+        done <<< "$(claude::parse_names "${names[@]}")"
+        ;;
+    list)
+        log::header "Available packs"
+        packs::list_available
+        echo ""
+        log::header "Installed at $target_base"
+        packs::list_installed "$target_base/agents"
+        ;;
+    *)
+        log::error "Usage: dot claude packs {add|remove|list} [--project] [<pack>...]"
+        exit 1
+        ;;
+esac
