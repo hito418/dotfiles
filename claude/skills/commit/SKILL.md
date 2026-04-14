@@ -6,6 +6,8 @@ allowed-tools: Bash(git *), Read, Grep, Glob
 
 # Atomic Commit
 
+Commit message conventions (prefix, length, body, Co-Authored-By) live in `rules/git.md`. This skill focuses on *splitting work into atomic commits*.
+
 ## Workflow
 
 ### 1. Analyze working tree
@@ -20,7 +22,7 @@ Read changed files as needed to understand intent.
 
 ### 2. Group changes by logical concern
 
-Partition all changes (staged + unstaged) into groups where each group represents **one atomic unit of work**: a single feature, fix, refactor, or chore.
+Partition all changes (staged + unstaged) into groups where each group is **one atomic unit of work**: a single feature, fix, refactor, or chore.
 
 Grouping heuristics:
 - Same feature/module/component → one group
@@ -33,6 +35,8 @@ If everything belongs to a single concern, make one commit.
 
 ### 3. Commit each group sequentially
 
+Order: foundational changes first, dependent changes after.
+
 For each group, stage only the relevant files/hunks and commit:
 
 ```
@@ -40,16 +44,7 @@ git add <file ...>
 git commit -m "<type>: <concise why>"
 ```
 
-When a file contains changes belonging to different groups, commit it with the group where it has the most relevant changes. Note this in the commit message body if needed.
-
-Commit message rules:
-- Conventional commit prefix: `feat:`, `fix:`, `refactor:`, `style:`, `test:`, `docs:`, `chore:`, `build:`, `ci:`
-- Subject line ≤ 72 chars
-- Explain *why*, not *what*
-- No `Co-Authored-By` line
-- Add a body (blank line after subject) only if the *why* isn't obvious from the subject
-
-Order commits logically: foundational changes first, dependent changes after.
+When a file contains changes from different groups, commit it with the group where its changes are most relevant. Note this in the body if non-obvious.
 
 ### 4. Verify
 
@@ -58,6 +53,4 @@ git log --oneline -n <number_of_commits_created>
 git status
 ```
 
-Confirm no changes were missed and the log reads as a clean narrative.
-
-Report the created commits to the user.
+Confirm no changes were missed and the log reads as a clean narrative. Report the created commits to the user.
