@@ -127,14 +127,13 @@ The `core` pack is installed globally during `dot self install`. Rules, skills a
 
 ### Skills
 
-| Skill            | Description                                           |
-| ---------------- | ----------------------------------------------------- |
-| `/commit`        | Atomic conventional commits grouped by logical concern |
-| `/create-pr`     | GitHub PR with auto-detected base and structured body |
-| `/create-mr`     | GitLab MR with auto-detected target and linked issues |
-| `/create-issue`  | GitHub issue via gh CLI                               |
-| `/create-issue-gl` | GitLab issue via glab CLI                           |
-| `/create-skill`  | Guide for creating new skills                         |
+| Skill            | Description                                                    |
+| ---------------- | -------------------------------------------------------------- |
+| `/commit`        | Atomic conventional commits grouped by logical concern         |
+| `/create-pr`     | GitHub PR or GitLab MR, auto-detected from the git remote      |
+| `/create-issue`  | GitHub or GitLab issue, auto-detected from the git remote      |
+| `/review-pr`     | Triage unresolved PR/MR comments, fix relevant ones, resolve rest |
+| `/create-skill`  | Guide for creating new skills                                  |
 
 ### MCP servers
 
