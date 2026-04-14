@@ -1,8 +1,8 @@
 ---
 name: create-issue
-description: Create a GitHub issue via gh CLI. Takes the user's description, drafts a clear title and structured body, and opens the issue assigned to the user. Use when the user says "create an issue", "open an issue", "file an issue", "make an issue", "new issue", or any variation requesting a GitHub issue.
+description: Create a GitHub or GitLab issue, auto-detecting the platform from the current repo's git remote. Takes the user's description, drafts a clear title and structured body, and opens the issue assigned to the user. Use when the user says "create an issue", "open an issue", "file an issue", "make an issue", "new issue", or any variation requesting an issue.
 argument-hint: "<description>"
-allowed-tools: Bash(gh *), Bash(git *), mcp__github__issue_write, mcp__github__issue_read, mcp__github__list_issues, mcp__github__search_issues
+allowed-tools: Bash(git *:*), Bash(gh *:*), Bash(glab *:*), Bash(scripts/*:*), Read, Grep, Glob
 model: sonnet
 ---
 
@@ -14,28 +14,24 @@ model: sonnet
 
 ## Workflow
 
-### 1. Identify repository
+### 1. Draft title and body
 
-```
-gh repo view --json owner,name -q '.owner.login + "/" + .name'
-```
+**Title**: concise, under 72 chars. Imperative mood for work (e.g., "Add dark mode toggle"); descriptive for bugs (e.g., "Login fails when session expires").
 
-### 2. Draft title and body
-
-**Title**: concise, under 72 chars. Use imperative mood when describing work (e.g., "Add dark mode toggle"). Use descriptive mood for bugs (e.g., "Login fails when session expires").
-
-**Body**: structure based on issue type — adapt to what fits, not a rigid template. Examples:
+**Body**: adapt structure to the issue type — don't force a rigid template.
 
 - **Bug**: what happens, expected behavior, reproduction context if known
 - **Feature**: what and why, acceptance criteria if clear
 - **Task/chore**: what needs to happen
 
-Keep it concise. Do not pad with boilerplate sections that add no information.
+Keep it concise. No boilerplate sections.
 
-### 3. Create issue
+### 2. Create the issue
+
+Invoke the helper. It detects GitHub vs. GitLab from the remote, calls the right CLI, and prints the URL.
 
 ```
-gh issue create --repo $REPO --title "<title>" --body "<body>" --assignee @me
+scripts/open_issue.py --title "<title>" --body "<body>"
 ```
 
-Report the issue URL to the user.
+Report the printed URL to the user.
